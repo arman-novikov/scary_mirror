@@ -19,8 +19,10 @@ QMAKE_LFLAGS += -pthread
 SOURCES += \
         main.cpp \
     face_recognizer.cpp \
-    msestimator.cpp
+    msestimator.cpp \
+    effects.cpp
 
 HEADERS += \
     face_recognizer.h \
-    msestimator.h
+    msestimator.h \
+    effects.h
