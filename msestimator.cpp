@@ -3,7 +3,8 @@
 
 using namespace std;
 
-MSEstimator::MSEstimator():
+MSEstimator::MSEstimator(std::string msg):
+    _msg(msg),
     _ts(chrono::system_clock::now()),
     _is_estimation_done(false)
 {}
@@ -12,7 +13,7 @@ void MSEstimator::get_elapsed()
 {
     const auto now = chrono::system_clock::now();
     auto ms = chrono::duration_cast<chrono::milliseconds>(now - this->_ts);
-std::cerr << ms.count() << " ms elapsed";
+std::cerr << this->_msg << ms.count() << " ms elapsed";
     this->_is_estimation_done = true;
 }
 
