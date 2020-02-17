@@ -18,9 +18,10 @@ int main(int, char**)
     cv::Mat photo = cv::imread("/home/arman/face.jpg", CV_LOAD_IMAGE_COLOR);
     mats_vec_t faces = recognizer.getFaceROI(photo);
 
-    for (auto& i: faces)
-        make_zombie(i);
-    //make_zombie(photo);
+    //for (auto& i: faces)
+    //    make_zombie(i);
+    make_zombie(photo);
+
 
     cv::imshow("Face Detection", photo);
     cv::waitKey(0);
