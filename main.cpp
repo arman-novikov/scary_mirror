@@ -15,7 +15,6 @@ const std::string EYES_CASCADE {
 
 int main(int, char**)
 {
-    test("/home/pi/faces/face2.jpg");
     const char winName[] = "scary_mirror";
     const cv::Scalar FILL_COLOR {255, 0, 0};
     FaceRecognizer recognizer(FACE_CASCADE, EYES_CASCADE);
@@ -28,12 +27,17 @@ int main(int, char**)
     }
 
     for (cv::Mat frame;;) {
+        std::vector<FaceAttr> fattrs{};
         cap >> frame;
         if (frame.empty())
             continue;
-        mats_vec_t faces = recognizer.getFaceROI(frame);
-        for (auto& i: faces)
-            make_zombie(i);
+        recognizer.getFaceAttr(frame, fattrs);
+        for (auto& fattr: fattrs) {
+            mat_fill(fattr.face, {255, 0, 0});
+            for (auto& eye: fattr.eyes) {
+                mat_fill(eye, {0, 255, 0});
+            }
+        }
         cv::imshow(winName, frame);
         if (cv::waitKey(1) != 255) {
             std::cout<<"pressed "<<"\n";
@@ -46,11 +50,16 @@ static void test(const std::string& file_path)
 {
     cv::Mat input = cv::imread(file_path, CV_LOAD_IMAGE_COLOR);
     FaceRecognizer recognizer(FACE_CASCADE, EYES_CASCADE);
-    mats_vec_t faces = recognizer.getFaceROI(input);
+    std::vector<FaceAttr> fattrs{};
 
-    for (auto& i : faces) {
-        mat_fill(i);
+    recognizer.getFaceAttr(input, fattrs);
+    for (auto& fattr: fattrs) {
+        mat_fill(fattr.face, {255, 0, 0});
+        for (auto& eye: fattr.eyes) {
+            mat_fill(eye, {0, 255, 0});
+        }
     }
+
     cv::imshow("face detected", input);
     cv::waitKey(0);
     exit(0);
