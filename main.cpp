@@ -11,11 +11,14 @@ const std::string EYES_CASCADE {
     "/home/pi/haarcascades/haarcascade_eye_tree_eyeglasses.xml"
 };
 
+[[noreturn]] [[maybe_unused]] static void test(const std::string& file_path);
+
 int main(int, char**)
 {
+    test("/home/pi/faces/face2.jpg");
     const char winName[] = "scary_mirror";
     const cv::Scalar FILL_COLOR {255, 0, 0};
-    FaceRecognizer recognizer(FACE_CASCADE, EYES_CASCADE);    
+    FaceRecognizer recognizer(FACE_CASCADE, EYES_CASCADE);
     cv::namedWindow(winName, cv::WINDOW_AUTOSIZE);
     cv::VideoCapture cap;
 
@@ -37,4 +40,18 @@ int main(int, char**)
             break;
         }
     }
+}
+
+static void test(const std::string& file_path)
+{
+    cv::Mat input = cv::imread(file_path, CV_LOAD_IMAGE_COLOR);
+    FaceRecognizer recognizer(FACE_CASCADE, EYES_CASCADE);
+    mats_vec_t faces = recognizer.getFaceROI(input);
+
+    for (auto& i : faces) {
+        mat_fill(i);
+    }
+    cv::imshow("face detected", input);
+    cv::waitKey(0);
+    exit(0);
 }
