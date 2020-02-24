@@ -16,6 +16,8 @@ LIBS += -lopencv_objdetect
 QMAKE_LFLAGS += -no-pie
 QMAKE_LFLAGS += -pthread
 
+QMAKE_CXXFLAGS += -O3
+
 SOURCES += \
         main.cpp \
     face_recognizer.cpp \
