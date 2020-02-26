@@ -1,7 +1,7 @@
 #include "face_recognizer.h"
+#include "effects.h"
 #include <iostream>
 #include "opencv2/highgui.hpp"
-#include <effects.h>
 
 const std::string FACE_CASCADE {
     "/home/pi/haarcascades/haarcascade_frontalface_default.xml"
@@ -15,6 +15,8 @@ const std::string EYES_CASCADE {
 
 int main(int, char**)
 {
+    const cv::Mat zombie_face = cv::imread(
+                "/home/pi/faces/zombie1.jpg", CV_LOAD_IMAGE_COLOR);
     const char winName[] = "scary_mirror";
     const cv::Scalar FILL_COLOR {255, 0, 0};
     FaceRecognizer recognizer(FACE_CASCADE, EYES_CASCADE);
@@ -26,18 +28,24 @@ int main(int, char**)
         return -1;
     }
 
+    cap.set(cv::CAP_PROP_FRAME_WIDTH, 1280);
+    cap.set(cv::CAP_PROP_FRAME_HEIGHT, 720);
     for (cv::Mat frame;;) {
         std::vector<FaceAttr> fattrs{};
         cap >> frame;
         if (frame.empty())
             continue;
-        recognizer.getFaceAttr(frame, fattrs);
+
+        mats_vec_t faces = recognizer.getFaceROI(frame, 1.0, 50);
+        for (auto &i: faces)
+            make_zombie(i, zombie_face);
+        /*recognizer.getFaceAttr(frame, fattrs);
         for (auto& fattr: fattrs) {
             mat_fill(fattr.face, {255, 0, 0});
             for (auto& eye: fattr.eyes) {
                 mat_fill(eye, {0, 255, 0});
             }
-        }
+        }*/
         cv::imshow(winName, frame);
         if (cv::waitKey(1) != 255) {
             std::cout<<"pressed "<<"\n";
