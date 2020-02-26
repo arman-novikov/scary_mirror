@@ -65,7 +65,7 @@ void FaceRecognizer::getFaceAttr(
     // @todo: check _face_cascade on emptiness
     this->_face_cascade.detectMultiScale(
         prepared_frame, faces,
-        1.1, 2, cv::CASCADE_SCALE_IMAGE, cv::Size(250,250));
+        1.1, 2, cv::CASCADE_SCALE_IMAGE, cv::Size(100,100));
 
 
     for (const auto& face: faces) {
@@ -79,7 +79,7 @@ void FaceRecognizer::getFaceAttr(
 
         this->_eyes_cascade.detectMultiScale(
             prepared_frame, eyes,
-            1.1, 2, cv::CASCADE_SCALE_IMAGE, cv::Size(30,30)
+            1.1, 2, cv::CASCADE_SCALE_IMAGE, cv::Size(25,25)
         );
 
         for (const auto &eye: eyes) {
