@@ -17,7 +17,8 @@ class FaceRecognizer {
 public:
     FaceRecognizer(const std::string& haarcascade_face,
                    const std::string& haarcascade_eyes);
-    mats_vec_t getFaceROI(const cv::Mat& frame, double factor = 1.0);
+    mats_vec_t getFaceROI(const cv::Mat& frame,
+                          double factor = 1.0, int extra = 0);
     void getFaceAttr(
             const cv::Mat& frame, std::vector<FaceAttr>& res,
             double factor = 1.0);

@@ -11,7 +11,7 @@ FaceRecognizer::FaceRecognizer(
 }
 
 mats_vec_t FaceRecognizer::getFaceROI(
-        const cv::Mat& frame, double factor)
+        const cv::Mat& frame, double factor, int extra)
 {
     MSEstimator estimator;
     std::vector<cv::Rect> faces;
@@ -34,10 +34,12 @@ estimator.get_elapsed();
 std::cerr << std::endl;
 
     for (const auto& face: faces) {
-        const int x = static_cast<int>(face.tl().x/factor);
-        const int y = static_cast<int>(face.tl().y/factor);
-        const int width = static_cast<int>(face.width/factor);
-        const int height = static_cast<int>(face.height/factor);
+        const int width = static_cast<int>((face.width + extra)/factor);
+        const int height = static_cast<int>((face.height + extra)/factor);
+        int x = static_cast<int>((face.tl().x - extra)/factor);
+        int y = static_cast<int>((face.tl().y - extra)/factor);
+        if (x < 0) x = 0;
+        if (y < 0) y = 0;
         cv::Rect face_area_on_orig_frame(x, y, width, height);
         res.push_back(frame(face_area_on_orig_frame));
     }
